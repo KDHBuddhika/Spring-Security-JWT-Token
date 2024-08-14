@@ -6,6 +6,7 @@ import com.Springboot.security.jwt.entity.User;
 import com.Springboot.security.jwt.repo.RoleRepo;
 import com.Springboot.security.jwt.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -18,6 +19,9 @@ public class UserService {
 
     @Autowired
     private RoleRepo roleRepo;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public User registerNewUser(User user) {
         return userRepo.save(user);
@@ -51,7 +55,8 @@ public class UserService {
         if(!userRepo.existsById("admin@gmail.com")){
             User user = new User();
             user.setUserName("admin@gmail.com");
-            user.setUserPassword("1234");
+//            user.setUserPassword(passwordEncoder.encode("1234"));
+            user.setUserPassword(getPasswordEncoder("1234"));
             user.setUserFirstName("Dinesh");
             user.setUserSecondName("Hashan");
 
@@ -65,7 +70,8 @@ public class UserService {
         if(!userRepo.existsById("user@gmail.com")){
             User user = new User();
             user.setUserName("user@gmail.com");
-            user.setUserPassword("12345");
+//            user.setUserPassword(passwordEncoder.encode("12345"));
+            user.setUserPassword(getPasswordEncoder("12345"));
             user.setUserFirstName("Hashan");
             user.setUserSecondName("Dinesh");
 
@@ -77,4 +83,11 @@ public class UserService {
         }
 
     }
+
+    public String getPasswordEncoder(String password){
+        return passwordEncoder.encode(password);
+
+    }
+
+
 }
