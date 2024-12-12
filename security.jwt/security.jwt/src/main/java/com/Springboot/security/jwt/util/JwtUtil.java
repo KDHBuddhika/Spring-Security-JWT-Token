@@ -19,44 +19,39 @@ public class JwtUtil {
     private static final int TOKEN_VALIDITY = 3600*5;     //VALID for 5 hours
 
 
-    //user send karanawa  token ekhth ekka request ekk, ethakota e user kaude kiyala hoyaganimata adala method ekh
+    // 1 This method is ,when sent token with request from frontend to backend, identify username of token
     public String getUsernameFromToken(String token){
-        return getClaimFromToken(token, Claims::getSubject);                //claims is user name , getSubject is sub of token ,u can refer to serch google that jwt
+        return getClaimFromToken(token, Claims::getSubject);    // subject walata set karanne , username wage dewal JWT token playload ekhta adlawa
     }
 
-    public <T> T getClaimFromToken(String token , Function<Claims,T> claimsResolver){       //                       // return a generic type in a method.onama wargaye data type ekhkin return karanwa .T (for "Type"), E (for "Element"), K (for "Key"), V (for "Value"),
+    // 2  this method is used for get all claims(details) of the token
+    public <T> T getClaimFromToken(String token , Function<Claims,T> claimsResolver){       // <T> T  this return type is genetica, that not include spesific return type
          final Claims claims = getAllClaimsFromToken(token);
          return claimsResolver.apply(claims);
     }
 
+    // 3 this method is used for get all claims(details) of the token
     private Claims getAllClaimsFromToken(String token){
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();             // jwt token ekh playload(Data) ekh thama body ekh kiyanne
     }
 
 
-    //token validate ,, token thina  user name ekhi user ge user name ekhi samanade kiyala balanwa
+    // (A) token ekhn ekh ena user name ekhi , thina user name ekhi samanade kiyala balanawa
     public  Boolean validateToken(String token , UserDetails userDetails){
         final String username = getUsernameFromToken(token);
-
-//        if(username.equals(userDetails.getUsername())){
-//            return true;
-//        }else {
-//            return false;
-//        }
-
         return (username.equals(userDetails.getUsername())  && !isTokenExpired(token));    // token ekh expirde kiylath balanna one
     }
 
 
-    //token ekh expirde kiylath balana method ekh
+   // (B)  find that token is expired
     public Boolean isTokenExpired(String token){
         final Date expiration = getClaimFromToken(token ,Claims :: getExpiration);
         return expiration.before(new Date());
-
     }
 
 
-    // token ekk genarate kirima
+
+    // this is method that use to cerate token
     public String createToken(UserDetails userDetails){
       Map<String,Object> claims = new HashMap<>();
 

@@ -6,6 +6,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+
+
+// block all request by spring security . use that class for unblock
 @Configuration
 public class CorsConfiguration {
     private  static  final String GET = "GET";
@@ -18,7 +21,7 @@ public class CorsConfiguration {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                 registry.addMapping("/**")
+                 registry.addMapping("/**")                //onema request ekhkata access denna
                          .allowedMethods(GET,POST,PUT,DELETE)
                          .allowedHeaders("*")
                          .allowedOriginPatterns("*")

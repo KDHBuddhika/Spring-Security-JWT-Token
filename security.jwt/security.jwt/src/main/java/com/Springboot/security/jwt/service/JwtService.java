@@ -32,6 +32,8 @@ public class JwtService implements UserDetailsService {
     @Autowired
     private JwtUtil jwtUtil;
 
+
+    // 1 userwa set karanwa
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepo.findById(username).get();
@@ -48,15 +50,19 @@ public class JwtService implements UserDetailsService {
 
     }
 
+
+    // 2
     private Set getAuthority(User user)
     {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-
+    //get all user role
 //        for(Role role : user.getRole())
 //        {
 //            authorities.add(new SimpleGrantedAuthority("ROLE_"+ role.getRoleName() ));
 //        }
 
+
+        //lamda function above code
         user.getRole().forEach(role -> {
             authorities.add(new SimpleGrantedAuthority("ROLE_"+ role.getRoleName()));
         });
@@ -71,8 +77,11 @@ public class JwtService implements UserDetailsService {
         String username = loginRequest.getUserName();
         String userPassword = loginRequest.getUserPassword();
 
+        // user authenticate kara ganima
         authenticate(username,userPassword);
 
+
+        // userdeatils wala user kenk innwade kiyala balanwa
         UserDetails userDetails = loadUserByUsername(username);
         String newGenerateToken = jwtUtil.createToken(userDetails);      //user details walin tiken ekk generate kirima
         User user =  userRepo.findById(username).get();
