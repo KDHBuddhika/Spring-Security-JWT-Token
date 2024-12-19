@@ -36,6 +36,7 @@ public class JwtService implements UserDetailsService {
     // 1 userwa set karanwa
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        System.out.println(username);
         User user = userRepo.findById(username).get();
 
         if (user != null ){
@@ -99,9 +100,11 @@ public class JwtService implements UserDetailsService {
  //-------------------------------------------------------------------------------------
     public void authenticate(String username,String userPassword) throws Exception{
         try{
+            System.out.println("auth"+username);
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username,userPassword));
-
+            System.out.println("auth sucess"+username);
         }catch (BadCredentialsException e){
+            System.out.println("auth failed"+username);
             throw new Exception("Invalid_credentials");
 
         }
